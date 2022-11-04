@@ -1,0 +1,13 @@
+{
+  "name": "Data Collector",
+  "version": "0.0.1",
+  "description": "Collect data from Zerynth",
+  "author": "WiFeye",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+}
