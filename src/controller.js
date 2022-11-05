@@ -12,10 +12,7 @@ module.exports = {
     },
     async fingerprints_transfer(config) {
         const timeseries = await importer.timeseries(config);
-        const fingerprints = [];
-        for (const timeserie of timeseries.result) {
-            fingerprints.push(...formatter.parse_timeserie(timeserie));
-        }
+        const fingerprints = formatter.parse_timeseries(timeseries.result);
         return await exporter.create_fingerprints(fingerprints);
     }
 };

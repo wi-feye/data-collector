@@ -58,7 +58,7 @@ module.exports = {
      */
     timeseries: async (config = {}) => {
         const from = config.from || 1;
-        const size = config.size || 50;
+        const size = config.size || 100;
         const device_ids = config.device_ids || [];
         const workspace_id = config.workspace_id || WORKSPACE_ID;
         const devices_uri = device_ids.length > 0 ? device_ids.map(v => `&device=${v}`).reduce((x, y) => x + y) : '';
