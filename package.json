@@ -5,9 +5,11 @@
   "author": "WiFeye",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/index.js"
   },
   "dependencies": {
-    "express": "^4.16.1"
+    "axios": "^1.1.3",
+    "dotenv": "^16.0.3",
+    "node-cron": "^3.0.2"
   }
 }
