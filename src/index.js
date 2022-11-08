@@ -1,8 +1,11 @@
-require('dotenv').config();
-const cron = require('node-cron');
+import cron from 'node-cron';
+import controller from './controller.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const controller = require('./controller.js');
-
+/**
+ * Main function of the data-collector service.
+ */
 function main() {
     const cmd = process.argv.length > 2 ? process.argv[2] : '';
     const execution_callback = () => controller.fingerprints_transfer().then(console.log);
@@ -12,7 +15,7 @@ function main() {
         case 'help': console.log('available commands:\n\tworkspace_list\n\tdevice_list'); break;
         default: process.env.MODE == 'DEV' ? execution_callback() : cron.schedule(process.env.CRON_CONFIG, execution_callback);
     }
-    
+
 }
 
 main();

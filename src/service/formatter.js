@@ -1,6 +1,11 @@
-const hash = require('object-hash');
+import hash from 'object-hash';
 
-module.exports = {
+export default {
+    /**
+     * Function to parse timeseries in fingerprints.
+     * @param {Object[]} timeseries List of timeseries to parse.
+     * @returns List of fingerprints to export.
+     */
     parse_timeseries: (timeseries) => {
         const fingerprints = {};
         for (const timeserie of timeseries) {

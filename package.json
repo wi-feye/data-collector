@@ -4,6 +4,7 @@
   "description": "Collect data from Zerynth",
   "author": "WiFeye",
   "main": "src/server.js",
+  "type": "module",
   "scripts": {
     "start": "node src/index.js"
   },

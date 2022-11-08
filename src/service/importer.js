@@ -1,11 +1,32 @@
-require('dotenv').config()
-const axios = require('axios');
+import axios from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
 
+/**
+ * Zerynth api key to do rest api request on zerynth cloud.
+ */
 const API_KEY = process.env.ZERINTH_API_KEY;
+
+/**
+ * Zerynth base url of device manager services.
+ */
 const BASEURL_DEVICE_MANAGER = process.env.ZERINTH_BASEURL_DEVICE_MANAGER;
+
+/**
+ * Zerynth base url of storage services.
+ */
 const BASEURL_STORAGE = process.env.ZERINTH_BASEURL_STORAGE;
+
+/**
+ * Default zerynth workspace id.
+ */
 const WORKSPACE_ID = process.env.ZERINTH_WORKSPACE_ID;
 
+/**
+ * Base function to do a rest api get call to Zerynth cloud.
+ * @param {String} url Url where request data.
+ * @returns Result of the request.
+ */
 async function get(url) {
     try {
         const res = await axios.get(url, {
@@ -20,7 +41,7 @@ async function get(url) {
     }
 }
 
-module.exports = {
+export default {
     /**
      * Retrieve the list of workspeces. We have a workspace that is fixed for our project.
      * @returns List of workspaces.
@@ -29,31 +50,32 @@ module.exports = {
 
     /**
      * Retrieve the devices information related to a certain workspace id.
-     * @param workspace_id Workspace id.
+     * @param {String} workspace_id Workspace id.
      * @returns List of workspaces.
      */
     devices: (workspace_id = WORKSPACE_ID) => get(`${BASEURL_DEVICE_MANAGER}workspaces/${workspace_id}/devices`),
 
     /**
      * Retrieve fota of a device.
-     * @param device_id Device id.
+     * @param {String} device_id Device id.
      * @returns Fota information.
      */
     fota: (device_id) => get(`${BASEURL_DEVICE_MANAGER}devices/${device_id}/fota`),
 
     /**
      * Retrieve jobs of a device.
-     * @param device_id Device id.
+     * @param {String} device_id Device id.
      * @returns Jobs information.
      */
     jobs: (device_id) => get(`${BASEURL_DEVICE_MANAGER}devices/${device_id}/jobs`),
 
     /**
      * Retrieve timeseries of a certain workspace related to all the devices.
-     * @param from Pagination from.
-     * @param size Page size using pagination.
-     * @param device_ids List of devices id.
-     * @param workspace_id Workspace id.
+     * @param {Object} config Configuration object composed by:
+     *          - from (Number | undefined): starting pagination point.
+     *          - size (Number | undefined): pagination size.
+     *          - device_ids (String | undefined): list of devices id to filter timeseries.
+     *          - workspace_id (String | undefined): workspace id where make the request to take timeseries from workspace devices.
      * @returns Retrieved timeseries.
      */
     timeseries: async (config = {}) => {
