@@ -11,12 +11,20 @@ export default {
         return await importer.workspaces();
     },
     /**
-     * Function to list Zerynth devices givn a workspace.
-     * @param {string} workspace_id Workspace id to retrieve his devices.
+     * Function to list Zerynth devices given a workspace.
+     * @param {String} workspace_id Workspace id to retrieve its devices.
      * @returns List of devices.
      */
     async device_list(workspace_id) {
         return await importer.devices(workspace_id);
+    },
+    /**
+     * Function to list Zerynth timeseries given a workspace.
+     * @param {Object} config Configuration of timeseries call to filter results.
+     * @returns List of timeseries.
+     */
+    async timeseries_list(config) {
+        return await importer.timeseries(config);
     },
     /**
      * Function to get timeseries, parse them in fingerprints and send them to wi-feye server.
