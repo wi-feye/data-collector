@@ -1,6 +1,5 @@
 import hash from 'object-hash';
 import dotenv from 'dotenv';
-import crypto from "crypto";
 dotenv.config();
 
 const MIN_DEVICES = process.env.MIN_DEVICES || 0;
@@ -16,10 +15,9 @@ export default {
         const fingerprints = {};
         for (const timeserie of timeseries) {
             for (const scan of timeserie.payload.scans) {
-                const mac_hash = crypto.createHash("sha256").update(scan[3]).digest("hex");
                 const unique_fields = {
                     timestamp: timeserie.timestamp_device,
-                    mac_hash
+                    mac_hash: scan[3]
                 };
                 const device_id = timeserie.device_id;
                 const rssi = scan[4];
