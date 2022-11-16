@@ -1,5 +1,6 @@
 import cron from 'node-cron';
 import controller from './controller.js';
+import fs from 'fs';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -23,10 +24,15 @@ function main() {
     } else if (Object.keys(base_commands).includes(cmd)) {
         base_commands[cmd]().then(v => console.log(JSON.stringify(v, null, '\t')));
     } else {
-        const execution_callback = () => controller.fingerprints_transfer().then(console.log);
+        const ls_path = 'local_storage.json';
+        const execution_callback = () => {
+            const ls = fs.existsSync(ls_path) ? JSON.parse(fs.readFileSync(ls_path)) : undefined;
+            const start = ls ? ls.last_update : undefined;
+            fs.writeFileSync(ls_path, JSON.stringify({last_update: new Date()}));
+            return controller.fingerprints_transfer({start}).then(console.log);
+        }
         process.env.MODE == 'DEV' ? execution_callback() : cron.schedule(process.env.CRON_CONFIG, execution_callback);
     }
-    const execution_callback = () => controller.fingerprints_transfer().then(console.log);
 
 }
 

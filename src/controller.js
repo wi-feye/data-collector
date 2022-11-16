@@ -33,7 +33,7 @@ export default {
      */
     async fingerprints_transfer(config) {
         const timeseries = await importer.timeseries(config);
-        const fingerprints = formatter.parse_timeseries(timeseries.result);
+        const fingerprints = formatter.parse_timeseries(timeseries);
         return await exporter.create_fingerprints(fingerprints);
     }
 };

@@ -2,3 +2,4 @@
 **package-lock.json
 mock_test
 .env
+local_storage.json

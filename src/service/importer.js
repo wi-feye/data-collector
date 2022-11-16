@@ -72,6 +72,8 @@ export default {
     /**
      * Retrieve timeseries of a certain workspace related to all the devices.
      * @param {Object} config Configuration object composed by:
+     *          - start (Date | undefined): starting timestamp.
+     *          - end (Date | undefined): ending timestamp.
      *          - from (Number | undefined): starting pagination point.
      *          - size (Number | undefined): pagination size.
      *          - device_ids (String | undefined): list of devices id to filter timeseries.
@@ -79,11 +81,18 @@ export default {
      * @returns Retrieved timeseries.
      */
     timeseries: async (config = {}) => {
+        const start = config.start;
+        const end = config.end;
         const from = config.from || 1;
         const size = config.size || 100;
         const device_ids = config.device_ids || [];
         const workspace_id = config.workspace_id || WORKSPACE_ID;
+        console.log(start)
+        const start_uri = start ? `&start=${start}` : '';
+        const end_uri = end ? `&end=${end}` : '';
         const devices_uri = device_ids.length > 0 ? device_ids.map(v => `&device=${v}`).reduce((x, y) => x + y) : '';
-        return await get(`${BASEURL_STORAGE}timeseries/${workspace_id}/data?from=${from}&size=${size}${devices_uri}`);
+        const url = `${BASEURL_STORAGE}timeseries/${workspace_id}/data?from=${from}&size=${size}${start_uri}${end_uri}${devices_uri}`;
+        const timeseries = await get(url);
+        return Object.keys(timeseries).includes('result') ? timeseries.result : [];
     }
 }
