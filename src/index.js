@@ -25,11 +25,19 @@ function main() {
         base_commands[cmd]().then(v => console.log(JSON.stringify(v, null, '\t')));
     } else {
         const ls_path = 'local_storage.json';
-        const execution_callback = () => {
+        const execution_callback = async () => {
             const ls = fs.existsSync(ls_path) ? JSON.parse(fs.readFileSync(ls_path)) : undefined;
             const start = ls ? ls.last_update : undefined;
-            fs.writeFileSync(ls_path, JSON.stringify({last_update: new Date()}));
-            return controller.fingerprints_transfer({start}).then(console.log);
+            if(start) {
+                console.log(`start retreving from ${start}...`);
+            }
+            fs.writeFileSync(ls_path, JSON.stringify({ last_update: new Date() }));
+            try {
+                const server_res = await controller.fingerprints_transfer({ start });
+                console.log(server_res);
+            } catch (e) {
+                console.error(e);
+            }
         }
         process.env.MODE == 'DEV' ? execution_callback() : cron.schedule(process.env.CRON_CONFIG, execution_callback);
     }

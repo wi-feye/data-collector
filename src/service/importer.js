@@ -87,7 +87,6 @@ export default {
         const size = config.size || 100;
         const device_ids = config.device_ids || [];
         const workspace_id = config.workspace_id || WORKSPACE_ID;
-        console.log(start)
         const start_uri = start ? `&start=${start}` : '';
         const end_uri = end ? `&end=${end}` : '';
         const devices_uri = device_ids.length > 0 ? device_ids.map(v => `&device=${v}`).reduce((x, y) => x + y) : '';

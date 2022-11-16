@@ -33,7 +33,11 @@ export default {
      */
     async fingerprints_transfer(config) {
         const timeseries = await importer.timeseries(config);
-        const fingerprints = formatter.parse_timeseries(timeseries);
-        return await exporter.create_fingerprints(fingerprints);
+        if (timeseries.length > 0) {
+            const fingerprints = formatter.parse_timeseries(timeseries);
+            return await exporter.create_fingerprints(fingerprints);
+        } else {
+            throw `not existing detection!`;
+        }
     }
 };
