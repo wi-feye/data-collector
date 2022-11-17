@@ -1,17 +1,12 @@
 import hash from 'object-hash';
-import dotenv from 'dotenv';
-dotenv.config();
-
-const MIN_DEVICES = process.env.MIN_DEVICES || 0;
 
 export default {
     /**
      * Function to parse timeseries in fingerprints.
      * @param {Object[]} timeseries List of timeseries to parse.
-     * @param {Number} min_devices Minimum number of devices for fingerprints.
      * @returns List of fingerprints to export.
      */
-    parse_timeseries: (timeseries, min_devices = MIN_DEVICES) => {
+    parse_timeseries: (timeseries) => {
         const fingerprints = {};
         for (const timeserie of timeseries) {
             for (const scan of timeserie.payload.scans) {
@@ -48,6 +43,6 @@ export default {
             }
             fingerprint.devices = devices;
         }
-        return fingerprint_list.filter(f => f.devices.length >= min_devices);
+        return fingerprint_list;
     }
 };

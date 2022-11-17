@@ -97,8 +97,8 @@ export default class ZerynthApi {
         const size = config.size || 100;
         const device_ids = config.device_ids || [];
         const workspace_id = config.workspace_id;
-        const start_uri = start ? `&start=${start}` : '';
-        const end_uri = end ? `&end=${end}` : '';
+        const start_uri = start ? `&start=${new Date(start).toISOString()}` : '';
+        const end_uri = end ? `&end=${new Date(end).toISOString()}` : '';
         const devices_uri = device_ids.length > 0 ? device_ids.map(v => `&device=${v}`).reduce((x, y) => x + y) : '';
         const url = `${BASEURL_STORAGE}timeseries/${workspace_id}/data?from=${from}&size=${size}${start_uri}${end_uri}${devices_uri}`;
         const timeseries = await this.__get(url);

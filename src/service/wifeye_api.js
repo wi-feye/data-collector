@@ -35,7 +35,7 @@ export default class WifeyeApi {
             });
             return res.data;
         } catch (e) {
-            console.error(`Exception of exporter in call ${url}`);
+            console.error(`Exception of wi-feye api in call ${url}`);
             return e.data;
         }
     }
@@ -53,7 +53,7 @@ export default class WifeyeApi {
             });
             return res.data;
         } catch (e) {
-            console.error(`Exception of exporter in call ${url}`);
+            console.error(`Exception of wi-feye api in call ${url}`);
             return e.data;
         }
     }
