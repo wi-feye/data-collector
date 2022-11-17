@@ -1,0 +1,13 @@
+version: "3.6"
+
+services:
+
+  data-collector:
+    # Building the image
+    <<: &data-collector
+      image: "data-collector:latest"
+      build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+      - "10005:10005"
