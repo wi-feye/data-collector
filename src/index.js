@@ -8,7 +8,7 @@ dotenv.config();
  * Main function of the data-collector service.
  */
 function main() {
-    const execution_callback = () => controller.position_detections_transfer()
+    const execution_callback = () => controller.raws_transfer()
         .then(v => console.log(`${new Date().toISOString()} - ${v}`))
         .catch(v => console.error(`${new Date().toISOString()} - [ERROR] - ${v}`));
     if (process.env.MODE == 'DEV') {

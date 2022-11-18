@@ -67,11 +67,11 @@ export default class WifeyeApi {
     }
 
     /**
-     * Function able to send the api request to create a list of position detections.
-     * @param {Object[]} position_detections Position detections to send.
+     * Function able to send the api request to create a list of raw detections.
+     * @param {Object[]} raws Raw detections to send.
      * @returns Server api response.
      */
-    create_position_detections(position_detections) {
-        return this.__post(`${BASEURL_STORAGE}create-position-detections`, position_detections);
+    create_raws(raws) {
+        return this.__post(`${BASEURL_STORAGE}create-position-detections`, raws);
     }
 }

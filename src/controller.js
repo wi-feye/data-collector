@@ -9,16 +9,16 @@ const wifeye_api = new WifeyeApi(process.env.WIFEYE_API_KEY);
 
 export default {
     /**
-     * Function to get timeseries, parse them in position detections and send them to wi-feye server.
+     * Function to get timeseries, parse them in raw detections and send them to wi-feye server.
      * @param {Object} config Configuration of filter for timeseries api call.
      * @returns Wi-feye db service response.
      */
-    async position_detections_transfer(config) {
+    async raws_transfer(config) {
         const users = await wifeye_api.get_users();
-        const position_detections = [];
+        const raws = [];
         for (const user of users) {
             const zerynth_api = new ZerynthApi(user.apikey_zerynth);
-            const position_detection = {
+            const raw = {
                 id: user.id,
                 buildings: [],
             };
@@ -33,7 +33,7 @@ export default {
                 if (timeseries.length > 0) {
                     const detections = formatter.parse_timeseries(timeseries);
                     if (detections.length > 0) {
-                        const position_detections = [];
+                        const raws = [];
                         for (const detection of detections) {
                             const sniffers = [];
                             for (const device of detection.devices) {
@@ -43,30 +43,30 @@ export default {
                                 });
                             }
                             if (sniffers.length >= MIN_DEVICES) {
-                                position_detections.push({
+                                raws.push({
                                     timestamp: detection.timestamp,
                                     mac_hash: detection.mac_hash,
                                     sniffers
                                 });
                             }
                         }
-                        position_detection.buildings.push({
+                        raw.buildings.push({
                             id: building.id,
-                            position_detections,
+                            raws,
                             last_update
                         });
                     }
                 }
             }
-            if (position_detection.buildings.length > 0) {
-                position_detections.push(position_detection);
+            if (raw.buildings.length > 0) {
+                raws.push(raw);
             }
         }
-        if (position_detections.length > 0) {
-            const res = await wifeye_api.create_position_detections(position_detections);
+        if (raws.length > 0) {
+            const res = await wifeye_api.create_raws(raws);
             return res.status ? 'OK' : 'ERROR';
         } else {
-            return 'No position_detections retrieved';
+            return 'No raws retrieved';
         }
     }
 };
