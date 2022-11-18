@@ -1,5 +1,6 @@
 **node_modules
 **package-lock.json
 mock_test
-.env
+**.env
 local_storage.json
+**.http
