@@ -67,20 +67,11 @@ export default class WifeyeApi {
     }
 
     /**
-<<<<<<< HEAD
-     * Function able to send the api request to create a list of fingerprints.
-     * @param {Object[]} fingerprints Fingerprints to send.
-     * @returns Server api response.
-     */
-    create_fingerprints(fingerprints) {
-        return this.__post(`${BASEURL_STORAGE}fingerprints`, fingerprints);
-=======
      * Function able to send the api request to create a list of position detections.
      * @param {Object[]} position_detections Position detections to send.
      * @returns Server api response.
      */
     create_position_detections(position_detections) {
         return this.__post(`${BASEURL_STORAGE}create-position-detections`, position_detections);
->>>>>>> c00233e29b8bb23422296a4396f9b5c0218c71c9
     }
 }
