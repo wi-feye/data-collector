@@ -1,4 +1,10 @@
 **node_modules
 **package-lock.json
 mock_test
+<<<<<<< HEAD
 local_storage.json
+=======
+**.env
+local_storage.json
+**.http
+>>>>>>> c00233e29b8bb23422296a4396f9b5c0218c71c9

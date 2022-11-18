@@ -23,7 +23,11 @@ Service able to get data from *Zerynth cloud* through api call, format them and 
 
 Before server running must be create a **.env** file with the same structure of *.env-test*. Missing files should be filled with:
 
+<<<<<<< HEAD
 - MIN_DEVICES= minimum number of devices that a fingerprint should have. If a request is detected from a number of devices smaller than this threshold is ignored
+=======
+- MIN_DEVICES= minimum number of devices that a position detection should have. If a request is detected from a number of devices smaller than this threshold is ignored
+>>>>>>> c00233e29b8bb23422296a4396f9b5c0218c71c9
 - WIFEYE_BASEURL_STORAGE= wi-feye base url where is hosted the db
 - WIFEYE_API_KEY= wi-feye auth api key to send data to db service
 
@@ -143,7 +147,11 @@ It is the class able to query from Zerynth cloud different information:
 }
 ```
 ### Formatter
+<<<<<<< HEAD
 It takes list of timeseries provided with timeseries function of zerynth_api and format them to a list of fingerprints. In particular this function is able to fix a unique *fingerpreint_id* (that is than removed before the exportation) composed by *timestamp_device* and the *mac_address* (hashed with sha256 hash function) to assign it the list of devices that tracks this probe request. Devices are firstly collected and then it's kept the mean of rssi of each device for each fingerprint. In the end are filtered all fingerprints with number of devices greater or equal than e certain parameter **MIN_DEVICES** that can be set in .env file. The JSON structure of fingerprints is:
+=======
+It takes list of timeseries provided with timeseries function of zerynth_api and format them to a list of position detections. In particular this function is able to fix a unique *fingerpreint_id* (that is than removed before the exportation) composed by *timestamp_device* and the *mac_address* (hashed with sha256 hash function) to assign it the list of devices that tracks this probe request. Devices are firstly collected and then it's kept the mean of rssi of each device for each position detection. In the end are filtered all position detections with number of devices greater or equal than e certain parameter **MIN_DEVICES** that can be set in .env file. The JSON structure of position detections is:
+>>>>>>> c00233e29b8bb23422296a4396f9b5c0218c71c9
 ```
 [
     {
@@ -194,7 +202,11 @@ The wifeye_api file contains the class to handle wi-feye rest api calls. One is 
 ]
 ```
 
+<<<<<<< HEAD
 Another function is *create_fingerprints* that takes the list of fingerprints described above and sends it to wi-feye db service. The api call to do this use the **POST** method and in the body has the list of fingerprints while in the header it is used the following object:
+=======
+Another function is *create_position_detections* that takes the list of position detections described above and sends it to wi-feye db service. The api call to do this use the **POST** method and in the body has the list of position detections while in the header it is used the following object:
+>>>>>>> c00233e29b8bb23422296a4396f9b5c0218c71c9
 ```
 {
     'Authorization': 'Bearer <API_KEY>',    # authorization key
@@ -204,7 +216,11 @@ Another function is *create_fingerprints* that takes the list of fingerprints de
 The authorization key (that is used in all of WifeyeApi class api calls) is useful to increase the safety of the service. In this way only the service with the correct <API_KEY> can send this request to the wi-feye db service.
 
 ### Controller
+<<<<<<< HEAD
 Provides the main method that aggregates all the previous files. With function *fingerprints_transfer* the controller is able to retrieve users with associated workspaces from wifi-eye db, retrieve for each of these the associated timeseries that are formatted in fingerprints and in the and to collect all of these information and send them to the wi-feye db. The json structure of the sended object is: 
+=======
+Provides the main method that aggregates all the previous files. With function *position_detections_transfer* the controller is able to retrieve users with associated workspaces from wifi-eye db, retrieve for each of these the associated timeseries that are formatted in position detections and in the and to collect all of these information and send them to the wi-feye db. The json structure of the sended object is: 
+>>>>>>> c00233e29b8bb23422296a4396f9b5c0218c71c9
 ```
 [
     {

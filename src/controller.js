@@ -9,52 +9,64 @@ const wifeye_api = new WifeyeApi(process.env.WIFEYE_API_KEY);
 
 export default {
     /**
-     * Function to get timeseries, parse them in fingerprints and send them to wi-feye server.
+     * Function to get timeseries, parse them in position detections and send them to wi-feye server.
      * @param {Object} config Configuration of filter for timeseries api call.
      * @returns Wi-feye db service response.
      */
-    async fingerprints_transfer(config) {
+    async position_detections_transfer(config) {
         const users = await wifeye_api.get_users();
-        const fingerprints = [];
+        const position_detections = [];
         for (const user of users) {
-            const zerynth_api = new ZerynthApi(user.apik);
-            const fingerprint = {
+            const zerynth_api = new ZerynthApi(user.apikey_zerynth);
+            const position_detection = {
                 id: user.id,
-                workspaces: [],
+                buildings: [],
             };
-            for (const workspace of user.workspaces) {
+            for (const building of user.buildings) {
                 const last_update = new Date();
-                const devices_map = Object.fromEntries(workspace.devices.map(v => [v.idz, v.id]));
+                const sniffers_map = Object.fromEntries(building.sniffers.map(v => [v.id_zerynth, v.id]));
                 const timeseries = await zerynth_api.timeseries({
                     ...config,
-                    workspace_id: workspace.idz,
-                    start: workspace.last_update
+                    workspace_id: building.id_zerynth,
+                    start: building.last_update
                 });
                 if (timeseries.length > 0) {
                     const detections = formatter.parse_timeseries(timeseries);
                     if (detections.length > 0) {
-                        for(const detection of detections) {
-                            for(const device of detection.devices) {
-                                device.id = devices_map[device.device_id];
-                                delete device.device_id;
+                        const position_detections = [];
+                        for (const detection of detections) {
+                            const sniffers = [];
+                            for (const device of detection.devices) {
+                                sniffers.push({
+                                    id: sniffers_map[device.device_id],
+                                    rssi: device.rssi,
+                                });
+                            }
+                            if (sniffers.length >= MIN_DEVICES) {
+                                position_detections.push({
+                                    timestamp: detection.timestamp,
+                                    mac_hash: detection.mac_hash,
+                                    sniffers
+                                });
                             }
                         }
-                        fingerprint.workspaces.push({
-                            id: workspace.id,
-                            detections: detections.filter(f => f.devices.length >= MIN_DEVICES),
+                        position_detection.buildings.push({
+                            id: building.id,
+                            position_detections,
                             last_update
                         });
                     }
                 }
             }
-            if (fingerprint.workspaces.length > 0) {
-                fingerprints.push(fingerprint);
+            if (position_detection.buildings.length > 0) {
+                position_detections.push(position_detection);
             }
         }
-        if (fingerprints.length > 0) {
-            return await wifeye_api.create_fingerprints(fingerprints);
+        if (position_detections.length > 0) {
+            const res = await wifeye_api.create_position_detections(position_detections);
+            return res.status ? 'OK' : 'ERROR';
         } else {
-            return 'No fingerprints retrieved';
+            return 'No position_detections retrieved';
         }
     }
 };
