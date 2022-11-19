@@ -72,6 +72,6 @@ export default class WifeyeApi {
      * @returns Server api response.
      */
     create_raws(raws) {
-        return this.__post(`${BASEURL_STORAGE}create-position-detections`, raws);
+        return this.__post(`${BASEURL_STORAGE}create-raws`, raws);
     }
 }
