@@ -174,7 +174,7 @@ The wifeye_api file contains the class to handle wi-feye rest api calls. One is 
                 last_update: '',
                 sniffers: [
                     {
-                        id: 0,
+                        id: 100001,
                         id_zerynth: ''
                     },
                     {
@@ -209,7 +209,7 @@ Provides the main method that aggregates all the previous files. With function *
 [
     {
         "id": 0,
-        "workspaces": [
+        "buildings": [
             {
                 "id": 0,
                 "detections": [

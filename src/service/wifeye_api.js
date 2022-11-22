@@ -67,9 +67,9 @@ export default class WifeyeApi {
      * @returns Server api response.
      */
     async get_users() {
-        const users = await this.__get(`${BASEURL_USER_MANAGER}users`);
+        const users = (await this.__get(`${BASEURL_USER_MANAGER}users`));
         const users_map = Object.fromEntries(users.map(u => [u.id, u]));
-        const buildings = await this.__get(`${BASEURL_DATA_MANAGER}buildings`);
+        const buildings = await this.__get(`${BASEURL_DATA_MANAGER}api/raw/push/datacollector/`);
         for(const building of buildings) {
             const user = users_map[building.id_user];
             if(user.buildings) {

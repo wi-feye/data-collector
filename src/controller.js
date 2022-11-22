@@ -7,6 +7,7 @@ dotenv.config();
 const MIN_DEVICES = process.env.MIN_DEVICES || 0;
 const wifeye_api = new WifeyeApi(process.env.WIFEYE_API_KEY);
 
+// TODO last_update
 export default {
     /**
      * Function to get timeseries, parse them in raw detections and send them to wi-feye server.
