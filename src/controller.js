@@ -7,7 +7,6 @@ dotenv.config();
 const MIN_DEVICES = process.env.MIN_DEVICES || 0;
 const wifeye_api = new WifeyeApi(process.env.WIFEYE_API_KEY);
 
-// TODO last_update
 export default {
     /**
      * Function to get timeseries, parse them in raw detections and send them to wi-feye server.
@@ -19,53 +18,46 @@ export default {
         const raws = [];
         for (const user of users) {
             const zerynth_api = new ZerynthApi(user.apikey_zerynth);
-            const raw = {
-                id: user.id,
-                buildings: [],
-            };
             for (const building of user.buildings) {
-                const last_update = new Date();
+                const lastupdate = new Date();
                 const sniffers_map = Object.fromEntries(building.sniffers.map(v => [v.id_zerynth, v.id]));
                 const timeseries = await zerynth_api.timeseries({
                     ...config,
                     workspace_id: building.id_zerynth,
-                    start: building.last_update
+                    start: building.lastupdate
                 });
                 if (timeseries.length > 0) {
                     const detections = formatter.parse_timeseries(timeseries);
                     if (detections.length > 0) {
-                        const raws = [];
+                        const records = [];
                         for (const detection of detections) {
-                            const sniffers = [];
+                            const rssi_device = [];
                             for (const device of detection.devices) {
-                                sniffers.push({
+                                rssi_device.push({
                                     id: sniffers_map[device.device_id],
                                     rssi: device.rssi,
                                 });
                             }
-                            if (sniffers.length >= MIN_DEVICES) {
-                                raws.push({
+                            if (rssi_device.length >= MIN_DEVICES) {
+                                records.push({
                                     timestamp: detection.timestamp,
                                     mac_hash: detection.mac_hash,
-                                    sniffers
+                                    rssi_device
                                 });
                             }
                         }
-                        raw.buildings.push({
-                            id: building.id,
-                            raws,
-                            last_update
+                        raws.push({
+                            id_building: building.id,
+                            records,
+                            lastupdate
                         });
                     }
                 }
             }
-            if (raw.buildings.length > 0) {
-                raws.push(raw);
-            }
         }
         if (raws.length > 0) {
             const res = await wifeye_api.create_raws(raws);
-            return res.status ? 'OK' : 'ERROR';
+            return res;
         } else {
             return 'No raws retrieved';
         }

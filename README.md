@@ -208,34 +208,29 @@ Provides the main method that aggregates all the previous files. With function *
 ```
 [
     {
-        "id": 0,
-        "buildings": [
+        "id_building": 0,
+        "records": [
             {
-                "id": 0,
-                "detections": [
+                "timestamp": "",
+                "mac_hash": "",
+                "rssi_device": [
                     {
-                        "timestamp": "",
-                        "mac_hash": "",
-                        "devices": [
-                            {
-                                "id": 0,
-                                "rssi": 0
-                            },
-                            {
-                                "id": 1,
-                                "rssi": 0
-                            },
-                            {
-                                "id": 2,
-                                "rssi": 0
-                            }
-                        ]
+                        "id": 0,
+                        "rssi": 0
                     },
-                    ...
+                    {
+                        "id": 1,
+                        "rssi": 0
+                    },
+                    {
+                        "id": 2,
+                        "rssi": 0
+                    }
                 ]
             },
             ...
         ]
-    }
+    },
+    ...
 ]
 ```
