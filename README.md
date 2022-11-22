@@ -24,9 +24,9 @@ Service able to get data from *Zerynth cloud* through api call, format them and 
 Before server running must be create a **.env** file with the same structure of *.env-test*. Missing files should be filled with:
 
 - MIN_DEVICES= minimum number of devices that a raw detection should have. If a request is detected from a number of devices smaller than this threshold is ignored
-- WIFEYE_BASEURL_STORAGE= wi-feye base url where is hosted the db
+- WIFEYE_BASEURL_USER_MANAGER= wi-feye base url of user manager service
+- WIFEYE_BASEURL_DATA_MANAGER= wi-feye base url of data manager service
 - WIFEYE_API_KEY= wi-feye auth api key to send data to db service
-
 
 ## Build docker image
 ```
@@ -161,29 +161,29 @@ It takes list of timeseries provided with timeseries function of zerynth_api and
 ]
 ```
 ### WifeyeApi
-The wifeye_api file contains the class to handle wi-feye rest api calls. One is the call created to retrieve users and workspaces information to use **API-KEY** of users and **last_update** of workspaces to filter data retrieved from Zerynth cloud. The json structure of *get_users* response should be:
+The wifeye_api file contains the class to handle wi-feye rest api calls. One is the call created to retrieve users and buildings information to use **API-KEY** of users and **last_update** of buildings to filter data retrieved from Zerynth cloud. The json structure of *get_users* response should be (this is the data joined from the two calls done on backend services user-manager and data-manager to retrieve users and buildiongs):
 ```
 [
     {
         id: 0,
         apik: "",
-        workspaces: [
+        buildings: [
             {
                 id: 0,
-                idz: '',
+                id_zerynth: '',
                 last_update: '',
-                devices: [
+                sniffers: [
                     {
                         id: 0,
-                        idz: ''
+                        id_zerynth: ''
                     },
                     {
                         id: 100002,
-                        idz: ''
+                        id_zerynth: ''
                     },
                     {
                         id: 100003,
-                        idz: ''
+                        id_zerynth: ''
                     },
                 ]
             },

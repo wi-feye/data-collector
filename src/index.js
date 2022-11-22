@@ -1,6 +1,5 @@
 import cron from 'node-cron';
 import controller from './controller.js';
-import fs from 'fs';
 import dotenv from 'dotenv';
 dotenv.config();
 

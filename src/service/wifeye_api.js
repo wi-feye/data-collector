@@ -3,9 +3,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 /**
- * Base url to send storage data of db service.
+ * Base url to get data manager information.
  */
-const BASEURL_STORAGE = process.env.WIFEYE_BASEURL_STORAGE;
+const BASEURL_USER_MANAGER = process.env.WIFEYE_BASEURL_USER_MANAGER;
+/**
+ * Base url to get and send data manager instances.
+ */
+const BASEURL_DATA_MANAGER = process.env.WIFEYE_BASEURL_DATA_MANAGER;
 
 /**
  * Wifeye api class that wraps all the api calls to get and send resources to wifeye db service.
@@ -62,8 +66,19 @@ export default class WifeyeApi {
      * Function able to send the api request to retrieve list of users.
      * @returns Server api response.
      */
-    get_users() {
-        return this.__get(`${BASEURL_STORAGE}users`);
+    async get_users() {
+        const users = await this.__get(`${BASEURL_USER_MANAGER}users`);
+        const users_map = Object.fromEntries(users.map(u => [u.id, u]));
+        const buildings = await this.__get(`${BASEURL_DATA_MANAGER}buildings`);
+        for(const building of buildings) {
+            const user = users_map[building.id_user];
+            if(user.buildings) {
+                user.buildings.push(building);
+            } else {
+                user.buildings = [building];
+            }
+        }
+        return users;
     }
 
     /**
@@ -72,6 +87,6 @@ export default class WifeyeApi {
      * @returns Server api response.
      */
     create_raws(raws) {
-        return this.__post(`${BASEURL_STORAGE}create-raws`, raws);
+        return this.__post(`${BASEURL_DATA_MANAGER}create-raws`, raws);
     }
 }
