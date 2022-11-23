@@ -4,7 +4,7 @@ import WifeyeApi from './service/wifeye_api.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const MIN_DEVICES = process.env.MIN_DEVICES || 0;
+const MIN_DEVICES = process.env.MIN_DEVICES || 3; // TODO FIX ME PLEASE
 const wifeye_api = new WifeyeApi(process.env.WIFEYE_API_KEY);
 
 export default {

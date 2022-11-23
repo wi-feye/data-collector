@@ -9,6 +9,7 @@ export default {
     parse_timeseries: (timeseries) => {
         const raws = {};
         for (const timeserie of timeseries) {
+            if (!timeserie.payload.scans) continue; // I'LL WORK, I'M SURE
             for (const scan of timeserie.payload.scans) {
                 const unique_fields = {
                     timestamp: timeserie.timestamp_device,

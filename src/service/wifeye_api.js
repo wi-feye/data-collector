@@ -58,6 +58,7 @@ export default class WifeyeApi {
             return res.data;
         } catch (e) {
             console.error(`Exception of wi-feye api in call ${url}`);
+            console.log(e);
             return e.data;
         }
     }
