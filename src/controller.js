@@ -18,7 +18,7 @@ export default {
         const raws = [];
         for (const user of users) {
             const zerynth_api = new ZerynthApi(user.apikey_zerynth);
-            if(!users.buildings) {
+            if(!user.buildings) {
                 continue;
             }
             for (const building of user.buildings) {
@@ -60,7 +60,7 @@ export default {
         }
         if (raws.length > 0) {
             const res = await wifeye_api.create_raws(raws);
-            return res;
+            return res.status ? res.message : res;
         } else {
             return 'No raws retrieved';
         }
