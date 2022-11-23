@@ -18,6 +18,9 @@ export default {
         const raws = [];
         for (const user of users) {
             const zerynth_api = new ZerynthApi(user.apikey_zerynth);
+            if(!users.buildings) {
+                continue;
+            }
             for (const building of user.buildings) {
                 const lastupdate = new Date();
                 const sniffers_map = Object.fromEntries(building.sniffers.map(v => [v.id_zerynth, v.id]));
