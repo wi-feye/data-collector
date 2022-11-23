@@ -9,28 +9,30 @@ export default {
     parse_timeseries: (timeseries) => {
         const raws = {};
         for (const timeserie of timeseries) {
-            for (const scan of timeserie.payload.scans) {
-                const unique_fields = {
-                    timestamp: timeserie.timestamp_device,
-                    mac_hash: scan[3]
-                };
-                const device_id = timeserie.device_id;
-                const rssi = scan[4];
-                const raw_id = hash(unique_fields);
-                if (Object.keys(raws).includes(raw_id)) {
-                    if (Object.keys(raws[raw_id].devices).includes(device_id)) {
-                        raws[raw_id].devices[device_id].push(rssi);
+            try {
+                for (const scan of timeserie.payload.scans) {
+                    const unique_fields = {
+                        timestamp: timeserie.timestamp_device,
+                        mac_hash: scan[3]
+                    };
+                    const device_id = timeserie.device_id;
+                    const rssi = scan[4];
+                    const raw_id = hash(unique_fields);
+                    if (Object.keys(raws).includes(raw_id)) {
+                        if (Object.keys(raws[raw_id].devices).includes(device_id)) {
+                            raws[raw_id].devices[device_id].push(rssi);
+                        } else {
+                            raws[raw_id].devices[device_id] = [rssi];
+                        }
                     } else {
+                        raws[raw_id] = {
+                            ...unique_fields,
+                            devices: {}
+                        };
                         raws[raw_id].devices[device_id] = [rssi];
                     }
-                } else {
-                    raws[raw_id] = {
-                        ...unique_fields,
-                        devices: {}
-                    };
-                    raws[raw_id].devices[device_id] = [rssi];
                 }
-            }
+            } catch (e) { }
         }
         const raw_list = Object.values(raws);
         for (const raw of raw_list) {

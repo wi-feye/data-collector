@@ -91,8 +91,8 @@ export default class ZerynthApi {
      * @returns Retrieved timeseries.
      */
     async timeseries(config = {}) {
-        const start = config.start;
-        const end = config.end;
+        const start = config.start; //'2022-11-21T00:00:00Z';//'2022-11-21T00:00:00Z'
+        const end = config.end; //'2022-11-22T00:00:00Z';//'2022-11-22T00:00:00Z'
         const from = config.from || 1;
         const size = config.size || 100;
         const device_ids = config.device_ids || [];
