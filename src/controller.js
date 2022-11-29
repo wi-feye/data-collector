@@ -18,17 +18,22 @@ export default {
         const raws = [];
         for (const user of users) {
             const zerynth_api = new ZerynthApi(user.apikey_zerynth);
-            if(!user.buildings) {
+            if (!user.buildings) {
                 continue;
             }
             for (const building of user.buildings) {
                 const lastupdate = new Date();
                 const sniffers_map = Object.fromEntries(building.sniffers.map(v => [v.id_zerynth, v.id]));
-                const timeseries = await zerynth_api.timeseries({
-                    ...config,
-                    workspace_id: building.id_zerynth,
-                    start: building.lastupdate
-                });
+                const timeseries = [];
+                for (const sniffer of building.sniffers) {
+                    const timeserie = await zerynth_api.timeseries({
+                        ...config,
+                        workspace_id: building.id_zerynth,
+                        start: building.lastupdate,
+                        device_ids: [sniffer.id_zerynth]
+                    });
+                    timeseries.push(...timeserie);
+                }
                 if (timeseries.length > 0) {
                     const detections = formatter.parse_timeseries(timeseries);
                     if (detections.length > 0) {
