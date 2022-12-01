@@ -11,6 +11,10 @@ const BASEURL_DEVICE_MANAGER = process.env.ZERINTH_BASEURL_DEVICE_MANAGER;
  * Zerynth base url of storage services.
  */
 const BASEURL_STORAGE = process.env.ZERINTH_BASEURL_STORAGE;
+/**
+ * Default max package size.
+ */
+const DEFAULT_MAX_PKG_SIZE = process.env.DEFAULT_MAX_PKG_SIZE;
 
 /**
  * Zerynth api class that wraps all the api calls to get resources from zerynth cloud.
@@ -94,7 +98,7 @@ export default class ZerynthApi {
         const start = config.start; //'2022-11-21T00:00:00Z';//'2022-11-21T00:00:00Z'
         const end = config.end; //'2022-11-22T00:00:00Z';//'2022-11-22T00:00:00Z'
         const from = config.from || 1;
-        const size = config.size || 500;
+        const size = config.size || DEFAULT_MAX_PKG_SIZE || 500;
         const device_ids = config.device_ids || [];
         const workspace_id = config.workspace_id;
         const start_uri = start ? `&start=${new Date(start).toISOString()}` : '';

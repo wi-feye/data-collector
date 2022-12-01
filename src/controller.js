@@ -29,7 +29,7 @@ export default {
                     const timeserie = await zerynth_api.timeseries({
                         ...config,
                         workspace_id: building.id_zerynth,
-                        start: building.lastupdate,
+                        start: config.start ? config.start : building.lastupdate,
                         device_ids: [sniffer.id_zerynth]
                     });
                     timeseries.push(...timeserie);
@@ -65,7 +65,7 @@ export default {
         }
         if (raws.length > 0) {
             const res = await wifeye_api.create_raws(raws);
-            return res.status ? res.message : res;
+            return res.status ? `loaded ${raws.length} data: ${res.message}` : res;
         } else {
             return 'No raws retrieved';
         }
