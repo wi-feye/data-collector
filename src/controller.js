@@ -23,8 +23,13 @@ export default {
             }
             for (const building of user.buildings) {
                 const lastupdate = lastupdate_gen ? lastupdate_gen(building) : new Date();
-                console.log(`${new Date().toLocaleString()} - Last update of building ${building.id}: ${lastupdate.toLocaleString()}`);
+                console.log(`${new Date().toLocaleString()} - Last update of building ${building.id}: ${building.lastupdate}`);
                 if (new Date().getTime() < new Date(building.lastupdate).getTime()) {
+                    raws.push({
+                        id_building: building.id,
+                        records: [],
+                        lastupdate
+                    });
                     continue;
                 }
                 const sniffers_map = Object.fromEntries(building.sniffers.map(v => [v.id_zerynth, v.id]));

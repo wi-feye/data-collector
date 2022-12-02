@@ -16,27 +16,35 @@ async function load_old_data() {
     let start_date = new Date(new Date(OLD_DATA_START_DATE).getTime() - 60 * 60 * 1000);
     let now = new Date();
     const create_next_date = (value) => {
-        return new Date(value.getTime() + milliseconds_gap);
+        const date = new Date(value.getTime() + milliseconds_gap);
+        return now.getTime() < date.getTime() ? undefined : date;
     };
     let end_date = create_next_date(start_date);
     const config = { size: DEFAULT_MAX_PKG_SIZE, end: end_date };
+    const max_date = new Date('2050-01-01T00:00:00Z');
     const gen_lastupdate = (building) => {
         if (building.id != 3) {
-            building.lastupdate = new Date('3000-01-01T00:00:00Z').toISOString();
-            return building.lastupdate;
+            building.lastupdate = max_date.toISOString();
+            return max_date;
         } else {
             if (start_date.getTime() > new Date(building.lastupdate).getTime()) {
                 building.lastupdate = start_date.toISOString();
             }
             start_date = new Date(building.lastupdate);
             end_date = create_next_date(start_date);
-            config.end = end_date;
-            return end_date;
+            if (end_date) {
+                config.end = end_date;
+                console.log(`${new Date().toLocaleString()} - Loaded from ${start_date.toLocaleString()} to ${end_date.toLocaleString()}`);
+                return end_date;
+            } else {
+                delete config.end;
+                console.log(`${new Date().toLocaleString()} - Loaded from ${start_date.toLocaleString()} to ${now.toLocaleString()}`);
+                return now;
+            }
         }
     };
-    while (end_date.getTime() < now.getTime()) {
+    while (start_date) {
         await execution_callback(config, gen_lastupdate);
-        console.log(`${new Date().toLocaleString()} - Loaded from ${start_date.toLocaleString()} to ${end_date.toLocaleString()}`);
         start_date = end_date;
         now = new Date();
     }
