@@ -13,7 +13,7 @@ export default {
      * @param {Object} config Configuration of filter for timeseries api call.
      * @returns Wi-feye db service response.
      */
-    async raws_transfer(config) {
+    async raws_transfer(config, lastupdate_gen = undefined) {
         const users = await wifeye_api.get_users();
         const raws = [];
         for (const user of users) {
@@ -22,14 +22,18 @@ export default {
                 continue;
             }
             for (const building of user.buildings) {
-                const lastupdate = new Date();
+                const lastupdate = lastupdate_gen ? lastupdate_gen(building) : new Date();
+                console.log(`${new Date().toLocaleString()} - Last update of building ${building.id}: ${lastupdate.toLocaleString()}`);
+                if (new Date().getTime() < new Date(building.lastupdate).getTime()) {
+                    continue;
+                }
                 const sniffers_map = Object.fromEntries(building.sniffers.map(v => [v.id_zerynth, v.id]));
                 const timeseries = [];
                 for (const sniffer of building.sniffers) {
                     const timeserie = await zerynth_api.timeseries({
                         ...config,
                         workspace_id: building.id_zerynth,
-                        start: config.start ? config.start : building.lastupdate,
+                        start: building.lastupdate,
                         device_ids: [sniffer.id_zerynth]
                     });
                     timeseries.push(...timeserie);
@@ -65,7 +69,7 @@ export default {
         }
         if (raws.length > 0) {
             const res = await wifeye_api.create_raws(raws);
-            return res.status ? `loaded ${raws.length} data: ${res.message}` : res;
+            return res.status ? `Loaded ${raws.length} data: ${res.message}` : res;
         } else {
             return 'No raws retrieved';
         }
